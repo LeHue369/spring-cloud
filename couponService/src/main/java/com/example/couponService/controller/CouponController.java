@@ -26,6 +26,7 @@ public class CouponController {
 
 	@GetMapping("/find")
 	public Coupon getCoupon(@RequestParam("code") String code) {
+		System.out.println("server 2 eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
 		return couponRepository.findByCode(code);
 	}
 }
