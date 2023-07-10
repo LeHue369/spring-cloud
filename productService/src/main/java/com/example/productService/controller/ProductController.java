@@ -4,10 +4,12 @@ import com.example.productService.entity.Coupon;
 import com.example.productService.entity.Product;
 import com.example.productService.repository.ProductRepository;
 import com.example.productService.restclients.CouponClient;
+import io.github.resilience4j.retry.annotation.Retry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -21,6 +23,7 @@ public class ProductController {
 	private ProductRepository repository;
 
 	@PostMapping
+	@Retry(name = "product-api", fallbackMethod = "handleError")
 	public Product create(@RequestBody Product product) {
 		Coupon coupon = couponClient.getCoupon(product.getCouponCode());
 		product.setPrice(product.getPrice().subtract(coupon.getDiscount()));
@@ -28,7 +31,8 @@ public class ProductController {
 
 	}
 
-//	public Product sendErrorResponse(Product product) {
-//		return product;
-//	}
+	public Product handleError(Product product, Exception exception) {
+		System.out.println("Inside handle error");
+		return product;
+	}
 }
