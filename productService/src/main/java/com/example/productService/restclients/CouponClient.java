@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(name = "gateway-service")
 public interface CouponClient {
 
-	@GetMapping("/coupons/find")
+	@GetMapping("/coupons/fin")
 	Coupon getCoupon(@RequestParam("code") String code);
 }
