@@ -1,1 +1,2 @@
-com\example\apiGatewayService\ApiGatewayServiceApplication.class
+com/example/apiGatewayService/filter/Filter.class
+com/example/apiGatewayService/ApiGatewayServiceApplication.class

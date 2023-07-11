@@ -11,12 +11,9 @@ services:
         POSTGRES_PASSWORD: 123456789
     ports:
        - '5432:5432'
-
-  pgadmin:
-    container_name: pgadmin_container
-    image: dpage/pgadmin4
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@gmail.com
-      PGADMIN_DEFAULT_PASSWORD: admin
-    ports:
-      - '5433:80'
+  zipkin:
+   image: openzipkin/zipkin
+   container_name: zipkin
+   restart: always
+   ports:
+      - '9411:9411'
