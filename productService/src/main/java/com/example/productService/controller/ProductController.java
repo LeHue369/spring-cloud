@@ -4,6 +4,7 @@ import com.example.productService.entity.Coupon;
 import com.example.productService.entity.Product;
 import com.example.productService.repository.ProductRepository;
 import com.example.productService.restclients.CouponClient;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import io.github.resilience4j.retry.annotation.Retry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,7 +30,8 @@ public class ProductController {
 	private String prop;
 
 	@PostMapping
-	@Retry(name = "product-api", fallbackMethod = "handleError")
+	@HystrixCommand(fallbackMethod = "sendErrorresponse")
+//	@Retry(name = "product-api", fallbackMethod = "handleError")
 	public Product create(@RequestBody Product product) {
 		Coupon coupon = couponClient.getCoupon(product.getCouponCode());
 		product.setPrice(product.getPrice().subtract(coupon.getDiscount()));
@@ -45,5 +47,9 @@ public class ProductController {
 	public Product handleError(Product product, Exception exception) {
 		System.out.println("Inside handle error");
 		return product;
+	}
+
+	public Product sendErrorresponse(Product product){
+		return new Product();
 	}
 }
